@@ -1,0 +1,159 @@
+@import url('https://fonts.googleapis.com/css2?family=Source+Code+Pro&family=Source+Sans+Pro:wght@400;700&display=swap');
+
+:root {
+  --font-mono: 'Source Code Pro', monospace;
+  --section-spacing: 2.5rem;
+  --color-gray-100: hsl(0, 0%, 97%);
+  --color-gray-200: hsl(0, 0%, 92%);
+  --color-gray-300: hsl(0, 0%, 80%);
+  --color-gray-400: hsl(0, 0%, 66%);
+  --color-gray-500: hsl(0, 0%, 55%);
+  --color-gray-900: hsl(0, 0%, 13%);
+  --color-background: var(--color-gray-100);
+  --color-text: var(--color-gray-900);
+  --border-radius: 4px;
+}
+
+*{
+  box-sizing: border-box;
+}
+
+html{
+  font-size: 16px;
+  font-family: 'Source Sans Pro', Arial, Helvetica, sans-serif;
+  margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  line-height: 1.5;
+}
+
+body{
+  margin: 0;
+}
+
+table{
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+h1, h2, h3{
+  margin: 0;
+}
+
+h2{
+  font-size: 2rem;
+  line-height: 3rem;
+  margin-bottom: 2rem;
+}
+
+h3{
+  font-size: 1.5rem;
+  line-height: 2rem;
+  margin-block-end: 0.5rem;
+}
+
+p + h3{
+  margin-block-start: 1rem;
+}
+
+h3 + p{
+  text-indent: 0;
+}
+
+p{
+  margin: 0;
+  text-indent: 2rem;
+}
+
+main{
+  width: 100vw;
+  max-width: 1024px;
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+
+header, section, footer{
+  padding: var(--section-spacing) 0;
+}
+
+header{
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+section{
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 2rem;
+}
+section > *{
+  grid-column: span 12;
+}
+
+section.headline h1{
+  font-size: 4.5rem;
+  line-height: 1;
+  font-weight: 300;
+  grid-column: span 6;
+  margin: 0;
+}
+section.headline h1 > *{
+  display: block;
+}
+section.headline label.file{
+  grid-column: span 6;
+  border: dashed 1px var(--color-gray-500);
+  border-radius: var(--border-radius);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.1s;
+}
+section.headline label.file:hover{
+  background-color: var(--color-gray-200);
+  cursor: pointer;
+}
+section.headline label.file input{
+  display: none;  
+}
+
+section.report table{
+  width: 100%;
+}
+section.report table thead td{
+  font-weight: 700;
+}
+section.report table tbody tr:nth-child(odd){
+  background: var(--color-gray-200);
+}
+section.report table tr td{
+  padding: 0.5rem;
+}
+section.report table tbody tr td{
+  font-family: var(--font-mono);
+}
+section.report table tr td:nth-child(1){
+  width: 50%;
+}
+section.report table tr td:nth-child(2){
+  width: 50%;
+  color: var(--color-gray-400)
+}
+section.report table tr td:nth-child(3){
+  text-align: right;
+}
+section.report table + h3{
+  margin-top: 2rem;
+}
+
+section.about{
+  display: block;
+  column-count: 2;
+  column-gap: 2rem
+}
+
+footer{
+  text-align: center;
+}
