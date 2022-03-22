@@ -148,10 +148,8 @@ section.report table + h3{
   margin-top: 2rem;
 }
 
-section.about{
-  display: block;
-  column-count: 2;
-  column-gap: 2rem
+section.about > div{
+  grid-column: span 6;
 }
 
 footer{
