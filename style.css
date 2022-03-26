@@ -3,14 +3,21 @@
 :root {
   --font-mono: 'Source Code Pro', monospace;
   --section-spacing: 2.5rem;
-  --color-gray-100: hsl(0, 0%, 97%);
-  --color-gray-200: hsl(0, 0%, 92%);
-  --color-gray-300: hsl(0, 0%, 80%);
-  --color-gray-400: hsl(0, 0%, 66%);
-  --color-gray-500: hsl(0, 0%, 55%);
-  --color-gray-900: hsl(0, 0%, 13%);
-  --color-background: var(--color-gray-100);
-  --color-text: var(--color-gray-900);
+  --color-gray-100: #EBEDEF;
+  --color-gray-200: #D6DBDF;
+  --color-gray-300: #AEB6BF;
+  --color-gray-400: #85929E;
+  --color-gray-500: #5D6D7E;
+  --color-gray-600: #34495E;
+  --color-gray-700: #2E4053;
+  --color-gray-800: #283747;
+  --color-gray-900: #212F3C;
+  --color-background: var(--color-gray-900);
+  --color-text: var(--color-gray-100);
+  --color-green-400: #76D7C4;
+  --color-green-500: #48C9B0;
+  --color-accent: var(--color-green-500);
+  --color-accent-hover: var(--color-green-400);
   --border-radius: 4px;
 }
 
@@ -65,6 +72,13 @@ p{
   text-indent: 2rem;
 }
 
+a{
+  color: var(--color-accent);
+}
+a:hover{
+  color: var(--color-accent-hover);
+}
+
 main{
   width: 100vw;
   max-width: 1024px;
@@ -85,18 +99,22 @@ header{
 section{
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 2rem;
+  gap: 1rem;
 }
 section > *{
   grid-column: span 12;
 }
 
 section.headline h1{
-  font-size: 4.5rem;
+  font-size: 15vw;
   line-height: 1;
   font-weight: 300;
   grid-column: span 6;
   margin: 0;
+}
+section.headline b{
+  font-weight: 700;
+  color: var(--color-accent)
 }
 section.headline h1 > *{
   display: block;
@@ -105,19 +123,33 @@ section.headline label.file{
   grid-column: span 6;
   border: dashed 1px var(--color-gray-500);
   border-radius: var(--border-radius);
-  padding: 1rem;
+  padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: all 0.1s;
+  min-height: 10rem;
+  text-align: center;
+}
+@media screen and (max-width: 880px) {
+  section.headline h1,
+  section.headline label.file{
+    grid-column: span 12;
+  }
+}
+@media screen and (min-width: 480px) {
+  section.headline h1{
+    font-size: 4.5rem;
+  }
 }
 section.headline label.file:hover{
-  background-color: var(--color-gray-200);
+  background-color: var(--color-gray-800);
   cursor: pointer;
 }
 section.headline label.file input{
   display: none;  
 }
+
 
 section.report table{
   width: 100%;
@@ -126,7 +158,7 @@ section.report table thead td{
   font-weight: 700;
 }
 section.report table tbody tr:nth-child(odd){
-  background: var(--color-gray-200);
+  background: var(--color-gray-800);
 }
 section.report table tr td{
   padding: 0.5rem;
@@ -144,12 +176,22 @@ section.report table tr td:nth-child(2){
 section.report table tr td:nth-child(3){
   text-align: right;
 }
+section.report table tbody tr td:nth-child(3){
+  color: var(--color-green-400);
+}
 section.report table + h3{
   margin-top: 2rem;
 }
 
-section.about > div{
-  grid-column: span 6;
+ol{
+  padding-left: 1rem;
+}
+
+@media screen and (min-width: 920px) {
+  section.about > div{
+    grid-column: span 6;
+    padding-right: 2rem;
+  }
 }
 
 footer{
