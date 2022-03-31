@@ -57,6 +57,7 @@ h3{
   font-size: 1.5rem;
   line-height: 2rem;
   margin-block-end: 0.5rem;
+  color: var(--color-accent);
 }
 
 p + h3{
@@ -120,6 +121,7 @@ section.headline h1 > *{
   display: block;
 }
 section.headline label.file{
+  background-color: var(--color-gray-800);
   grid-column: span 6;
   border: dashed 1px var(--color-gray-500);
   border-radius: var(--border-radius);
@@ -143,7 +145,7 @@ section.headline label.file{
   }
 }
 section.headline label.file:hover{
-  background-color: var(--color-gray-800);
+  background-color: var(--color-gray-700);
   cursor: pointer;
 }
 section.headline label.file input{
@@ -163,6 +165,7 @@ section.report table tbody tr:nth-child(odd){
 section.report table tr td{
   padding: 0.5rem;
 }
+section.report table tfoot tr td,
 section.report table tbody tr td{
   font-family: var(--font-mono);
 }
@@ -179,7 +182,19 @@ section.report table tr td:nth-child(3){
 section.report table tbody tr td:nth-child(3){
   color: var(--color-green-400);
 }
+section.report table tfoot{
+  border-top: solid 2px var(--color-background);
+  background: var(--color-gray-700);
+}
 section.report table + h3{
+  margin-top: 2rem;
+}
+section.report h4{
+  background: var(--color-accent);
+  color: var(--color-background);
+  padding: 1rem;
+  width: 100%;
+  text-align: center;
   margin-top: 2rem;
 }
 
