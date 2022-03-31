@@ -110,7 +110,7 @@ function dom_insert_table(kind){
       if(key.substr(4,1)=="3" && key.substr(5,1)){
         cnpj = "00000000000000";
       }else{
-        cnpj = cnpjs[key.toString().substr(0,4)].CNPJ.toString().padStart(14, '0');
+        cnpj = cnpjs[key.toString().substr(0,4)] ? cnpjs[key.toString().substr(0,4)].CNPJ.toString().padStart(14, '0') : "Não encontrado";
       }
 
       row_data_2.innerHTML = cnpj;
