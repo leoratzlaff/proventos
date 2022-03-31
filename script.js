@@ -107,9 +107,7 @@ function dom_insert_table(kind){
 
 
       console.log(key);
-      if(key.includes("11")){
-        cnpj = cnpjs[key].CNPJ.toString().padStart(14, '0');
-      }else if(key.substr(4,1)=="3" && key.substr(5,1)){
+      if(key.substr(4,1)=="3" && key.substr(5,1)){
         cnpj = "00000000000000";
       }else{
         cnpj = cnpjs[key.toString().substr(0,4)].CNPJ.toString().padStart(14, '0');

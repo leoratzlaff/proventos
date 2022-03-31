@@ -92,6 +92,27 @@ header, section, footer{
 }
 
 header{
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-direction: column;
+}
+header nav {
+  margin-top: 1rem;
+}
+header nav {
+  margin-top: 1rem;
+}
+@media screen and (min-width: 480px) {
+  header{
+    flex-direction: row;
+  }
+  header nav {
+    margin-top: 0rem;
+  }
+}
+
+header span{
   font-weight: bold;
   font-size: 1.5rem;
   line-height: 1;
