@@ -1,143 +1,110 @@
-let stocks = {};
-const NEW_STOCK = {
-  'juros': 0,
-  'dividendo': 0,
-  'rendimento': 0,
-  'leilao_fracao': 0
+const HEADING_LEVEL = {
+  ONE: 'h1',
+  TWO: 'h2',
+  THREE: 'h3',
+  FOUR: 'h4'
 }
 
 let input = document.getElementById('movimentacoes')
 input.addEventListener('change', async function () {
-  clearContent();
   const data = await extractExcelData(input.files);
-  data.forEach(function (value) {
-    conditionallyAddToObject(value.stock)
-    addTransaction(value);
-  });
-  stocks = sortObject(stocks);
-  printResults();
-})
+  const stocks = data.reduce(createStocksObject, {});
+  addReportToDocument(stocks);
+});
+
+function createStocksObject(stocks, excelData) {
+  const { stock, kind, total } = excelData;
+  if (stocks[kind] && stocks[kind][stock]) {
+    stocks[kind][stock] += total
+  } else {
+    stocks[kind] =  {...stocks[kind], ...{ [stock]: total }};
+  }
+  return stocks;
+}
+
+function addReportToDocument(stocks) {
+  clearContent();
+  domInsertTitle("Relatório", HEADING_LEVEL.TWO);
+  const totalDividendos = domInsertTable('Dividendos', stocks['dividendo']);
+  const totalJuros = domInsertTable('Juros', stocks['juros sobre capital próprio']);
+  const totalRendimentos = domInsertTable('Rendimento', stocks['rendimento']);
+  const totalLeilaoFracao = domInsertTable('Leilão de Fração', stocks['leilão de fração']);
+  const total = totalDividendos + totalJuros + totalRendimentos + totalLeilaoFracao;
+  domInsertTitle(`Total de proventos = R$${total.toFixed(2).toString().replace('.', ',')}`, HEADING_LEVEL.FOUR);
+}
 
 function clearContent() {
   document.getElementById('print').innerHTML = '';
 }
 
-function conditionallyAddToObject(stock) {
-  if (!stocks.hasOwnProperty(stock)) {
-    stocks[stock] = Object.create(NEW_STOCK);
-  }
-}
-
-function addTransaction(value) {
-  const { stock, kind, total } = value;
-  const storedStock = stocks[stock];
-
-  if (isJuros(kind)) {
-    storedStock['juros'] += total;
-  } else if (isDividendo(kind)) {
-    storedStock['dividendo'] += total;
-  } else if (isRendimento(kind)) {
-    storedStock['rendimento'] += total;
-  } else if (isLeilaoFracao(kind)) {
-    storedStock['leilao_fracao'] += total;
-  }
-}
-
-function sortObject(obj) {
-  return Object.keys(obj).sort().reduce(function (result, key) {
-    result[key] = obj[key];
-    return result;
-  }, {});
-}
-
-function printResults() {
-  dom_insert_title("Relatório", 2)
-  dom_insert_title("Dividendos", 3)
-  let total_dividendos = dom_insert_table("dividendo")
-  dom_insert_title("Juros", 3)
-  let total_juros = dom_insert_table("juros")
-  dom_insert_title("Rendimentos", 3)
-  let total_rendimentos = dom_insert_table("rendimento")
-  dom_insert_title("Leilão de Fração", 3)
-  let total_leilao_fracao = dom_insert_table("leilao_fracao")
-
-  let total_proventos = total_dividendos + total_juros + total_rendimentos + total_leilao_fracao;
-  dom_insert_title("Total de proventos = R$" + total_proventos.toFixed(2).toString().replace('.', ','), 4)
-}
-
-
-function dom_insert_title(text, level) {
-  var result = document.getElementById("print");
-  const heading = document.createElement("h" + level);
-  const textnode = document.createTextNode(text);
+function domInsertTitle(title, headingLevel) {
+  const element = document.getElementById("print");
+  const heading = document.createElement(headingLevel);
+  const textnode = document.createTextNode(title);
   heading.appendChild(textnode);
-  result.appendChild(heading);
+  element.appendChild(heading);
 }
 
-function dom_insert_table(kind) {
-  let table = document.createElement('table');
-  let thead = document.createElement('thead');
-  let tbody = document.createElement('tbody');
-  let tfoot = document.createElement('tfoot');
+function domInsertTable(title, content) {
+  domInsertTitle(title, HEADING_LEVEL.THREE);
+  const table = document.createElement('table');
+  const thead = document.createElement('thead');
+  const tbody = document.createElement('tbody');
+  const tfoot = document.createElement('tfoot');
 
   table.appendChild(thead);
   table.appendChild(tbody);
   table.appendChild(tfoot);
 
-  // Adding the entire table to the body tag
   document.getElementById('print').appendChild(table);
 
-  let heading_row = document.createElement('tr');
-  let heading_1 = document.createElement('td');
-  heading_1.innerHTML = "Código";
-  let heading_2 = document.createElement('td');
-  heading_2.innerHTML = "CNPJ";
-  let heading_3 = document.createElement('td');
-  heading_3.innerHTML = "R$";
-  heading_row.appendChild(heading_1);
-  heading_row.appendChild(heading_2);
-  heading_row.appendChild(heading_3);
-  thead.appendChild(heading_row);
+  const headingRow = document.createElement('tr');
+  const headingCode = document.createElement('td');
+  const headingCnpj = document.createElement('td');
+  const headingCurrency = document.createElement('td');
+  headingCode.innerHTML = "Código";
+  headingCnpj.innerHTML = "CNPJ";
+  headingCurrency.innerHTML = "R$";
+  headingRow.appendChild(headingCode);
+  headingRow.appendChild(headingCnpj);
+  headingRow.appendChild(headingCurrency);
+  thead.appendChild(headingRow);
 
   let total = 0;
 
-  for (const [key, value] of Object.entries(stocks)) {
-    if (value[kind] > 0) {
-      let row = document.createElement('tr');
-      let row_data_1 = document.createElement('td');
-      row_data_1.innerHTML = key;
-      let row_data_2 = document.createElement('td');
-
-      if (key.substr(4, 1) == "3" && key.substr(5, 1)) {
-        cnpj = "00000000000000";
-      } else {
-        cnpj = cnpjs[key.toString().substr(0, 4)] ? cnpjs[key.toString().substr(0, 4)].CNPJ.toString().padStart(14, '0') : "Não encontrado";
-      }
-
-      row_data_2.innerHTML = cnpj;
-      let row_data_3 = document.createElement('td');
-      total += value[kind];
-      row_data_3.innerHTML = value[kind].toFixed(2).toString().replace('.', ',');
-      row.appendChild(row_data_1);
-      row.appendChild(row_data_2);
-      row.appendChild(row_data_3);
-      tbody.appendChild(row);
+  for (const [key, value] of Object.entries(content)) {
+    let row = document.createElement('tr');
+    let rowCode = document.createElement('td');
+    let rowCnpj = document.createElement('td');
+    let rowValue = document.createElement('td');
+    
+    if (key.substr(4, 1) == "3" && key.substr(5, 1)) {
+      cnpj = "00000000000000";
+    } else {
+      cnpj = cnpjs[key.toString().substr(0, 4)] ? cnpjs[key.toString().substr(0, 4)].CNPJ.toString().padStart(14, '0') : "Não encontrado";
     }
+    
+    rowCode.innerHTML = key;
+    rowCnpj.innerHTML = cnpj;
+    rowValue.innerHTML = value.toFixed(2).toString().replace('.', ',');
+    row.appendChild(rowCode);
+    row.appendChild(rowCnpj);
+    row.appendChild(rowValue);
+    tbody.appendChild(row);
+    total += value;
   }
 
-  let footer_row = document.createElement('tr');
-  let footer_1 = document.createElement('td');
-  footer_1.innerHTML = "Total";
-  let footer_2 = document.createElement('td');
-  footer_2.innerHTML = "";
-  let footer_3 = document.createElement('td');
-  console.log(total.toFixed(2).toString());
-  footer_3.innerHTML = total.toFixed(2).toString().replace('.', ',');
-  footer_row.appendChild(footer_1);
-  footer_row.appendChild(footer_2);
-  footer_row.appendChild(footer_3);
-  tfoot.appendChild(footer_row);
+  const footerRow = document.createElement('tr');
+  const footerTotal = document.createElement('td');
+  const footerSpacing = document.createElement('td');
+  const footerTotalValue = document.createElement('td');
+  footerTotal.innerHTML = "Total";
+  footerSpacing.innerHTML = "";
+  footerTotalValue.innerHTML = total.toFixed(2).toString().replace('.', ',');
+  footerRow.appendChild(footerTotal);
+  footerRow.appendChild(footerSpacing);
+  footerRow.appendChild(footerTotalValue);
+  tfoot.appendChild(footerRow);
 
   return total;
-
 }
