@@ -58,7 +58,7 @@ function domInsertTable(title, content) {
     let rowCode = document.createElement('td');
     let rowCnpj = document.createElement('td');
     let rowValue = document.createElement('td');
-    
+
     rowCode.innerHTML = key;
     rowCnpj.innerHTML = findCnpj(key);
     rowValue.innerHTML = toBrlCurrencyFormat(value)
