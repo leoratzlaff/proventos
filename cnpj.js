@@ -737,6 +737,15 @@ let cnpjs = {
   "YDUQ": "08807432000110"
 }
 
+const EMPTY_CNPJ = "".padStart(14, "0");
+
 function findCnpj(code) {
+  if (isBdr(code)) {
+    return EMPTY_CNPJ;
+  }
   return cnpjs[code.slice(0, 4)]?.padStart(14, 0) ?? "Não encontrado";
+}
+
+function isBdr(code) {
+  return code.slice(4, 5) === "3" && code.charAt(5);
 }
